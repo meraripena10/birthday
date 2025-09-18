@@ -4,6 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Birthday Surprise 🎉</title>
+
+<!-- 🎨 Google Font -->
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&display=swap" rel="stylesheet">
+
 <style>
   body {
     margin: 0;
@@ -13,7 +17,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    font-family: 'Comic Sans MS', cursive, sans-serif;
+    font-family: 'Dancing Script', cursive;
     text-align: center;
     background: url('polcasan.jpeg') no-repeat center center;
     background-size: cover;
@@ -29,16 +33,15 @@
     z-index: 0;
   }
 
-  .gift-container, .card { position: relative; z-index: 1; }
+  .gift-container, .card, .controls { position: relative; z-index: 1; }
 
-  /* 🎁 Moved gift box lower */
   .gift-container {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: flex-end; /* push down */
-    height: 70vh; /* take most of the screen */
-    margin-bottom: 5vh; /* spacing from bottom */
+    justify-content: flex-end;
+    height: 70vh;
+    margin-bottom: 5vh;
   }
 
   .gift-box {
@@ -78,8 +81,8 @@
 
   .click-text {
     margin-top: 2vh;
-    font-size: 4vw;
-    max-font-size: 24px;
+    font-size: 5vw;
+    max-font-size: 28px;
     color: #fff;
     font-weight: bold;
     text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
@@ -104,7 +107,7 @@
   }
 
   @keyframes bounce { from { transform: translateY(0); } to { transform: translateY(-3vh); } }
-  @keyframes pulse { 0% { transform: scale(1); opacity:1; } 50% { transform: scale(1.1); opacity:0.7; } 100% { transform: scale(1); opacity:1; } }
+  @keyframes pulse { 0%,100% { transform: scale(1); opacity:1; } 50% { transform: scale(1.1); opacity:0.7; } }
   @keyframes shake {
     0% { transform: translateX(0); }
     25% { transform: translateX(-5px); }
@@ -125,6 +128,15 @@
     z-index: 1;
   }
 
+  .card h1 {
+    font-size: 8vw;
+    margin-bottom: 2vh;
+  }
+
+  .card p {
+    font-size: 5vw;
+  }
+
   @keyframes popIn { from { transform: scale(0.5); opacity: 0; } to { transform: scale(1); opacity:1; } }
 
   .confetti {
@@ -138,6 +150,29 @@
   }
 
   @keyframes fall { to { transform: translateY(110vh) rotate(360deg); } }
+
+  /* 🎵 Music Controls */
+  .controls {
+    margin-top: 20px;
+    display: none;
+  }
+
+  .controls button {
+    background: #ff4e88;
+    border: none;
+    color: white;
+    font-size: 4vw;
+    padding: 2vw 5vw;
+    border-radius: 30px;
+    margin: 0 10px;
+    cursor: pointer;
+    transition: 0.3s;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  }
+
+  .controls button:hover {
+    background: #e8437c;
+  }
 </style>
 </head>
 <body>
@@ -152,13 +187,17 @@
 <div class="card" id="card">
   <h1>🎉 Happy Birthday, My Love! 💕</h1>
   <p>Even oceans apart, you're always close to my heart🤍.<br>May your special day be as magical as you are! 🥳</p>
+  <div class="controls" id="controls">
+    <button id="playBtn">▶ Play</button>
+    <button id="pauseBtn">⏸ Pause</button>
+  </div>
 </div>
 
 <audio id="music" preload="auto"></audio>
 
 <script>
 // 🎵 Change music here
-const musicURL = 'JVKE - pretty (official video).mp3'; 
+const musicURL = 'your-music.mp3'; 
 const music = document.getElementById("music");
 music.src = musicURL;
 
@@ -167,6 +206,9 @@ const gift = document.getElementById("gift");
 const lid = document.getElementById("lid");
 const giftContainer = document.getElementById("giftContainer");
 const card = document.getElementById("card");
+const controls = document.getElementById("controls");
+const playBtn = document.getElementById("playBtn");
+const pauseBtn = document.getElementById("pauseBtn");
 
 // Sparkle effect
 function createSparkle() {
@@ -196,6 +238,7 @@ function createConfetti() {
 // Show card
 function showCard(){
   card.style.display='block';
+  controls.style.display='block'; // show music controls
   music.currentTime=0;
   music.play();
   createConfetti();
@@ -211,8 +254,13 @@ gift.addEventListener('click',()=>{
     showCard();
   },600);
 });
+
+// Music controls
+playBtn.addEventListener('click', ()=> music.play());
+pauseBtn.addEventListener('click', ()=> music.pause());
 </script>
 </body>
 </html>
+
 
 
