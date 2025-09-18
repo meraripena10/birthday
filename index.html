@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Birthday Surprise 🎉</title>
+<style>
+  body {
+    margin: 0;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Comic Sans MS', cursive, sans-serif;
+    text-align: center;
+    background: url('file:///Users/meraripena/Desktop/polcasan.jpeg') no-repeat center center;
+    background-size: cover;
+    position: relative;
+  }
+
+  body::before {
+    content: "";
+    position: absolute;
+    top:0; left:0;
+    width:100%; height:100%;
+    background: rgba(0,0,0,0.3);
+    z-index: 0;
+  }
+
+  .gift-container, .card { position: relative; z-index: 1; }
+
+  /* 🎁 Moved gift box lower */
+  .gift-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end; /* push down */
+    height: 70vh; /* take most of the screen */
+    margin-bottom: 5vh; /* spacing from bottom */
+  }
+
+  .gift-box {
+    width: 25vw;
+    max-width: 150px;
+    height: 25vw;
+    max-height: 150px;
+    background: #ff4e88;
+    position: relative;
+    border-radius: 10px;
+    cursor: pointer;
+    animation: bounce 1s infinite alternate, shake 0.5s infinite;
+    touch-action: manipulation;
+  }
+
+  .gift-box::before, .gift-box::after {
+    content: "";
+    position: absolute;
+    background: #fff;
+  }
+
+  .gift-box::before { top: 0; left: 50%; width: 15%; height: 100%; transform: translateX(-50%); }
+  .gift-box::after { top: 50%; left: 0; width: 100%; height: 15%; transform: translateY(-50%); }
+
+  .lid {
+    width: 30vw;
+    max-width: 170px;
+    height: 6vw;
+    max-height: 35px;
+    background: #ff4e88;
+    position: absolute;
+    top: -6vw;
+    left: -2.5vw;
+    border-radius: 8px 8px 0 0;
+    transition: transform 0.5s ease;
+  }
+
+  .click-text {
+    margin-top: 2vh;
+    font-size: 4vw;
+    max-font-size: 24px;
+    color: #fff;
+    font-weight: bold;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+    animation: pulse 1.5s infinite;
+  }
+
+  .sparkle {
+    position: absolute;
+    width: 5px;
+    height: 5px;
+    background: yellow;
+    border-radius: 50%;
+    pointer-events: none;
+    opacity: 0;
+    animation: sparkleAnim 1s linear infinite;
+  }
+
+  @keyframes sparkleAnim {
+    0% { opacity: 0; transform: translate(0,0) scale(0.5); }
+    50% { opacity: 1; transform: translate(var(--x), var(--y)) scale(1.2); }
+    100% { opacity: 0; transform: translate(var(--x), var(--y)) scale(0.5); }
+  }
+
+  @keyframes bounce { from { transform: translateY(0); } to { transform: translateY(-3vh); } }
+  @keyframes pulse { 0% { transform: scale(1); opacity:1; } 50% { transform: scale(1.1); opacity:0.7; } 100% { transform: scale(1); opacity:1; } }
+  @keyframes shake {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    50% { transform: translateX(5px); }
+    75% { transform: translateX(-5px); }
+    100% { transform: translateX(0); }
+  }
+
+  .card {
+    display: none;
+    background: rgba(255,255,255,0.95);
+    padding: 5vw;
+    border-radius: 5vw;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+    text-align: center;
+    max-width: 90vw;
+    animation: popIn 1s ease forwards;
+    z-index: 1;
+  }
+
+  @keyframes popIn { from { transform: scale(0.5); opacity: 0; } to { transform: scale(1); opacity:1; } }
+
+  .confetti {
+    position: absolute;
+    width: 2vw;
+    max-width: 8px;
+    height: 2vw;
+    max-height: 8px;
+    top: -10px;
+    animation: fall 5s linear forwards;
+  }
+
+  @keyframes fall { to { transform: translateY(110vh) rotate(360deg); } }
+</style>
+</head>
+<body>
+
+<div class="gift-container" id="giftContainer">
+  <div class="gift-box" id="gift">
+    <div class="lid" id="lid"></div>
+  </div>
+  <div class="click-text">Click to Open 🎁</div>
+</div>
+
+<div class="card" id="card">
+  <h1>🎉 Happy Birthday, My Love! 💕</h1>
+  <p>Even oceans apart, you're always close to my heart🤍.<br>May your special day be as magical as you are! 🥳</p>
+</div>
+
+<audio id="music" preload="auto"></audio>
+
+<script>
+// 🎵 Change music here
+const musicURL = 'https://www.dropbox.com/scl/fi/06u7ylnksqpv5mrambg5l/JVKE-pretty-official-video.mp3?rlkey=binzat3he1h3wwunpttjqwpsc&st=emfi5ywf&dl=1'; 
+const music = document.getElementById("music");
+music.src = musicURL;
+
+// Elements
+const gift = document.getElementById("gift");
+const lid = document.getElementById("lid");
+const giftContainer = document.getElementById("giftContainer");
+const card = document.getElementById("card");
+
+// Sparkle effect
+function createSparkle() {
+  for(let i=0;i<15;i++){
+    let s = document.createElement('div');
+    s.className='sparkle';
+    s.style.setProperty('--x', `${Math.random()*60-30}px`);
+    s.style.setProperty('--y', `${Math.random()*60-30}px`);
+    giftContainer.appendChild(s);
+    setTimeout(()=>s.remove(),1000);
+  }
+}
+
+// Confetti
+function createConfetti() {
+  for(let i=0;i<100;i++){
+    let c = document.createElement('div');
+    c.className='confetti';
+    c.style.left=Math.random()*100+'vw';
+    c.style.backgroundColor=`hsl(${Math.random()*360},100%,50%)`;
+    c.style.animationDuration=(Math.random()*3+2)+'s';
+    document.body.appendChild(c);
+    setTimeout(()=>c.remove(),5000);
+  }
+}
+
+// Show card
+function showCard(){
+  card.style.display='block';
+  music.currentTime=0;
+  music.play();
+  createConfetti();
+}
+
+// Gift click
+gift.addEventListener('click',()=>{
+  lid.style.transform="rotate(-45deg) translateY(-50px)";
+  createSparkle();
+  gift.style.animation = 'bounce 1s infinite alternate';
+  setTimeout(()=>{
+    giftContainer.style.display='none';
+    showCard();
+  },600);
+});
+</script>
+</body>
+</html>
+
+
